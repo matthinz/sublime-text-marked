@@ -16,7 +16,11 @@ class MarkedCommand(sublime_plugin.WindowCommand):
         for k, v in proc_env.items():
             proc_env[k] = os.path.expandvars(v).encode(encoding)
 
-        subprocess.call(['open', '-a', 'Marked', filename], env=proc_env)
+        # NOTE: v2 of Marked uses app name "Marked 2"
+        for appName in ['Marked', 'Marked 2']:
+            res = subprocess.call(['open', '-a', appName, filename], env=proc_env)
+            if res == 0:
+                return
 
     def is_enabled(self):
         return True
